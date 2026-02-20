@@ -1,33 +1,44 @@
-from flask import Flask, render_template, request,redirect,url_for
-from flask import flash
+from flask import Flask, render_template, request, redirect, url_for, flash
 from flask_wtf.csrf import CSRFProtect
 from config import DevelopmentConfig
-from flask import g
-
+from models import db, Alumnos
 import forms
-from models import db
-from models import Alumnos
+
 app = Flask(__name__)
 app.config.from_object(DevelopmentConfig)
-csrf=CSRFProtect()
 
-app = Flask(__name__)
-
+csrf = CSRFProtect(app)
 
 @app.errorhandler(404)
-def page_not_found():
+def page_not_found(e):
 	return render_template('404.html'), 404
 
 @app.route("/")
 @app.route("/index")
 def index():
-	return render_template("index.html")
+	alumnos_list=Alumnos.query.all()
+	return render_template("index.html", alumnos=alumnos_list)
 
 
-@app.route("/alumnos")
+@app.route("/alumnos", methods=["GET", "POST"])
 def alumnos():
-	return render_template("alumnos.html")
+	create_form=forms.UserForm(request.form)
+	if request.method=='POST':
+		if create_form.validate():
+			alum=Alumnos(nombre=create_form.nombre.data,
+				   apaterno=create_form.apaterno.data,
+				   email=create_form.email.data)
+			db.session.add(alum)
+			db.session.commit()
+			flash('Alumno registrado exitosamente', 'success')
+			return redirect(url_for("index"))
+	return render_template("alumnos.html", form=create_form)
 
+
+@app.route("/detalle/<int:id>")
+def detalle(id):
+	alumno=Alumnos.query.get_or_404(id)
+	return render_template("detalle.html", alumno=alumno)
 
 
 if __name__ == '__main__':
@@ -36,5 +47,3 @@ if __name__ == '__main__':
 	with app.app_context():
 		db.create_all()
 	app.run(debug=True)
-
-	
