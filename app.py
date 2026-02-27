@@ -40,6 +40,36 @@ def detalle(id):
 	alumno=Alumnos.query.get_or_404(id)
 	return render_template("detalle.html", alumno=alumno)
 
+@app.route("/modificar/<int:id>", methods=["GET", "POST"])
+def modificar(id):
+	alumno=Alumnos.query.get_or_404(id)
+	if request.method=='POST':
+		create_form=forms.UserForm(request.form)
+		if create_form.validate():
+			alumno.nombre=create_form.nombre.data
+			alumno.apaterno=create_form.apaterno.data
+			alumno.email=create_form.email.data
+			db.session.commit()
+			flash('Alumno modificado exitosamente', 'success')
+			return redirect(url_for("index"))
+		return render_template("modificar.html", form=create_form, alumno=alumno)
+	create_form=forms.UserForm()
+	create_form.nombre.data=alumno.nombre
+	create_form.apaterno.data=alumno.apaterno
+	create_form.email.data=alumno.email
+	return render_template("modificar.html", form=create_form, alumno=alumno)
+
+
+@app.route("/eliminar/<int:id>", methods=["GET", "POST"])
+def eliminar(id):
+	alumno=Alumnos.query.get_or_404(id)
+	if request.method=='POST':
+		db.session.delete(alumno)
+		db.session.commit()
+		flash('Alumno eliminado exitosamente', 'success')
+		return redirect(url_for("index"))
+	return render_template("eliminar.html", alumno=alumno)
+
 
 if __name__ == '__main__':
 	csrf.init_app(app)
