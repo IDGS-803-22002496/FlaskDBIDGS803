@@ -2,12 +2,17 @@ from flask import Flask, render_template, request, redirect, url_for, flash
 from flask_wtf.csrf import CSRFProtect
 from config import DevelopmentConfig
 from models import db, Alumnos
+from flask_migrate import Migrate
+from maestros.routes import maestros
 import forms
 
 app = Flask(__name__)
 app.config.from_object(DevelopmentConfig)
+app.register_blueprint(maestros)
 
 csrf = CSRFProtect(app)
+db.init_app(app)
+migrate = Migrate(app, db)
 
 @app.errorhandler(404)
 def page_not_found(e):
@@ -26,7 +31,8 @@ def alumnos():
 	if request.method=='POST':
 		if create_form.validate():
 			alum=Alumnos(nombre=create_form.nombre.data,
-				   apaterno=create_form.apaterno.data,
+				   apellidos=create_form.apellidos.data,
+				   numero=create_form.numero.data,
 				   email=create_form.email.data)
 			db.session.add(alum)
 			db.session.commit()
@@ -47,7 +53,8 @@ def modificar(id):
 		create_form=forms.UserForm(request.form)
 		if create_form.validate():
 			alumno.nombre=create_form.nombre.data
-			alumno.apaterno=create_form.apaterno.data
+			alumno.apellidos=create_form.apellidos.data
+			alumno.numero=create_form.numero.data
 			alumno.email=create_form.email.data
 			db.session.commit()
 			flash('Alumno modificado exitosamente', 'success')
@@ -55,7 +62,8 @@ def modificar(id):
 		return render_template("modificar.html", form=create_form, alumno=alumno)
 	create_form=forms.UserForm()
 	create_form.nombre.data=alumno.nombre
-	create_form.apaterno.data=alumno.apaterno
+	create_form.apellidos.data=alumno.apellidos
+	create_form.numero.data=alumno.numero
 	create_form.email.data=alumno.email
 	return render_template("modificar.html", form=create_form, alumno=alumno)
 
@@ -72,8 +80,4 @@ def eliminar(id):
 
 
 if __name__ == '__main__':
-	csrf.init_app(app)
-	db.init_app(app)
-	with app.app_context():
-		db.create_all()
 	app.run(debug=True)

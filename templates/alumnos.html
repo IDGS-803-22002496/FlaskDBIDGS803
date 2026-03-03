@@ -28,10 +28,20 @@
       </div>
 
       <div class="mb-5">
-        <label for="apaterno" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Apellido Paterno</label>
-        {{ form.apaterno(class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body", placeholder="Ingrese el apellido paterno") }}
-        {% if form.apaterno.errors %}
-          {% for error in form.apaterno.errors %}
+        <label for="apellidos" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Apellidos</label>
+        {{ form.apellidos(class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body", placeholder="Ingrese los apellidos") }}
+        {% if form.apellidos.errors %}
+          {% for error in form.apellidos.errors %}
+            <p class="mt-1 text-sm text-red-600">{{ error }}</p>
+          {% endfor %}
+        {% endif %}
+      </div>
+
+      <div class="mb-5">
+        <label for="numero" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Número</label>
+        {{ form.numero(class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body", placeholder="Ingrese el número") }}
+        {% if form.numero.errors %}
+          {% for error in form.numero.errors %}
             <p class="mt-1 text-sm text-red-600">{{ error }}</p>
           {% endfor %}
         {% endif %}

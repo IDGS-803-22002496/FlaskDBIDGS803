@@ -18,7 +18,8 @@
         <tr>
           <th scope="col" class="px-6 py-3 font-medium">ID</th>
           <th scope="col" class="px-6 py-3 font-medium">Nombre</th>
-          <th scope="col" class="px-6 py-3 font-medium">Apellido Paterno</th>
+          <th scope="col" class="px-6 py-3 font-medium">Apellidos</th>
+          <th scope="col" class="px-6 py-3 font-medium">Numero</th>
           <th scope="col" class="px-6 py-3 font-medium">Email</th>
           <th scope="col" class="px-6 py-3 font-medium">Acciones</th>
         </tr>
@@ -28,7 +29,8 @@
         <tr class="{{ 'bg-brand' if loop.index is odd else 'bg-brand-strong' }} border-b border-brand-light">
           <td class="px-6 py-4 font-medium text-fg-brand-subtle whitespace-nowrap">{{ alumno.id }}</td>
           <td class="px-6 py-4">{{ alumno.nombre }}</td>
-          <td class="px-6 py-4">{{ alumno.apaterno }}</td>
+          <td class="px-6 py-4">{{ alumno.apellidos }}</td>
+          <td class="px-6 py-4">{{ alumno.numero }}</td>
           <td class="px-6 py-4">{{ alumno.email }}</td>
           <td class="px-6 py-4 flex gap-2">
             <a href="{{ url_for('detalle', id=alumno.id) }}" class="text-white bg-success box-border border border-transparent hover:bg-success-strong focus:ring-4 focus:ring-success-medium shadow-xs font-medium leading-5 rounded-full text-sm px-4 py-2.5 focus:outline-none">Detalle</a>
@@ -38,7 +40,7 @@
         </tr>
         {% else %}
         <tr class="bg-brand">
-          <td colspan="5" class="px-6 py-8 text-center text-fg-brand-subtle">
+          <td colspan="6" class="px-6 py-8 text-center text-fg-brand-subtle">
             No hay alumnos registrados. ¡Agrega uno nuevo!
           </td>
         </tr>
