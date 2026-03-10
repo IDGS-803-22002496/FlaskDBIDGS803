@@ -3,7 +3,7 @@ from flask_wtf.csrf import CSRFProtect
 from config import DevelopmentConfig
 from models import db, Alumnos
 from flask_migrate import Migrate
-from maestros.routes import maestros
+from maestros import maestros
 import forms
 
 app = Flask(__name__)
